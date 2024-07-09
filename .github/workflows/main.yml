@@ -7,19 +7,8 @@ on:
 
 jobs:
 
-  login:
-    name: 'Login'
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: 'Dockerhub Login'
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_SERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-  build:
-    name: 'Build'
+  build-and-push:
+    name: 'Checkout | generate SHA | Dockerhub Login | Build and Push'
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +20,18 @@ jobs:
       run: |
         SHA=$(echo $GITHUB_SHA | head -c7)
         echo "sha=$SHA" >> $GITHUB_OUTPUT
-      
 
-    - name: 'Build docker image'
-      run: docker build -t herickdevelp/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }} .
+    - name: 'Dockerhub Login'
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_SERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: 'Build and Push'
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: |
+          herickdevelp/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }}
+          herickdevelp/nlw-journey-devops:latest
