@@ -6,6 +6,18 @@ on:
       - main
 
 jobs:
+
+  login:
+    name: 'Login'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 'Dockerhub Login'
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_SERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
   build:
     name: 'Build'
     runs-on: ubuntu-latest
