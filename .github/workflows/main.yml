@@ -6,9 +6,8 @@ on:
       - main
 
 jobs:
-
   build-and-push:
-    name: 'Checkout | generate SHA | Dockerhub Login | Build and Push'
+    name: 'Checkout | Generate SHA | Dockerhub Login | Build and Push'
     runs-on: ubuntu-latest
 
     steps:
